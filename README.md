@@ -4,7 +4,7 @@ Render 무료 플랜 서버를 15분마다 자동으로 깨워서 슬립 모드 
 
 ## 📋 관리 중인 서버
 
-- Daily Coffee: https://your-daily-coffee-app.onrender.com
+- Daily Coffee: https://cafe-today-coffee.onrender.com/
 
 ## ⏰ 실행 주기
 

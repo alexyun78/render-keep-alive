@@ -1,0 +1,42 @@
+name: Keep Render Servers Alive
+
+on:
+  schedule:
+    # 15분마다 실행 (매시 0, 15, 30, 45분)
+    - cron: '*/15 * * * *'
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  ping-servers:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Get current time
+        run: echo "Current time is $(date '+%Y-%m-%d %H:%M:%S UTC')"
+      
+      - name: Ping Daily Coffee Server
+        run: |
+          echo "🔔 Pinging Daily Coffee server..."
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://cafe-today-coffee.onrender.com/)
+          echo "Response code: $response"
+          if [ $response -eq 200 ] || [ $response -eq 301 ] || [ $response -eq 302 ]; then
+            echo "✅ Daily Coffee server is alive!"
+          else
+            echo "⚠️ Daily Coffee server returned: $response"
+          fi
+      
+      # 추가 서버가 있다면 여기에 추가
+      # - name: Ping Another Server
+      #   run: |
+      #     echo "🔔 Pinging another server..."
+      #     curl -f https://another-app.onrender.com || echo "⚠️ Ping failed"
+      
+      - name: Summary
+        run: |
+          echo "════════════════════════════════"
+          echo "🎉 Keep-alive check completed!"
+          echo "Time: $(date '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "════════════════════════════════"
